@@ -39,20 +39,18 @@ local fAnnounce = CreateFrame("Frame")
 fAnnounce:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 fAnnounce:RegisterEvent("UNIT_AURA")
 fAnnounce:SetScript("OnEvent", function(self, event, unit, _, _, _, id)
-	if (event == "UNIT_SPELLCAST_SUCCEEDED") then
-		if (unit == "player") then
-			for key, spell in pairs(auraids) do
-				if (id == spell.spellID) then
-					local output
-					if (GetRealNumRaidMembers() > 0) then
-						output = "RAID_WARNING"
-					elseif (GetRealNumPartyMembers() > 0) then
-						output = "PARTY"
-					end
-					if (output) then
-						SendChatMessage(GetSpellLink(id) .. " used!", output, nil, nil)
-						activeauras[spell.auraID] = spell.auraID
-					end
+	if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player") then
+		for key, spell in pairs(auraids) do
+			if (id == spell.spellID) then
+				local output
+				if (GetRealNumRaidMembers() > 0) then
+					output = "RAID_WARNING"
+				elseif (GetRealNumPartyMembers() > 0) then
+					output = "PARTY"
+				end
+				if (output) then
+					SendChatMessage(GetSpellLink(id) .. " used!", output, nil, nil)
+					activeauras[spell.auraID] = spell.auraID
 				end
 			end
 		end
